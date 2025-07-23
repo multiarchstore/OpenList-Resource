@@ -1,0 +1,67 @@
+name: Generate Directory Tree
+
+on:
+  push:
+    branches:
+      - main  # 主分支
+
+jobs:
+  generate-tree:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整的仓库历史
+
+      - name: Generate directory tree
+        run: |
+          # 安装tree命令
+          sudo apt-get install tree -y
+          
+          # 创建生成目录树的脚本
+          cat > generate_trees.sh << 'EOF'
+          #!/bin/bash
+          
+          # 查找所有文件夹，排除特定目录
+          find . -type d \( ! -path "*/.git/*" -a ! -path "*/.github/*" -a ! -path "*/.vscode/*" \) | while read -r dir; do
+              # 排除顶级隐藏目录
+              if [[ "$dir" == "./.git" || "$dir" == "./.github" || "$dir" == "./.vscode" ]]; then
+                  continue
+              fi
+              
+              # 进入目录
+              cd "$dir" || continue
+              
+              # 生成目录树并保存到index.html，排除已有的index.html和隐藏目录
+              tree -H . -L 2 -o index.html --charset=UTF-8 --ignore-case -I "index.html|.git|.github|.vscode|generate_trees.sh" .
+              
+              # 添加自定义样式
+              echo '<style>body { font-family: Arial, sans-serif; } .tree { margin: 20px; } .tree ul { list-style-type: none; margin-left: 20px; padding-left: 1em; position: relative; } .tree ul ul::before { content: ""; display: block; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background-color: #ccc; } .tree li { margin: 5px 0; padding-left: 1.5em; position: relative; } .tree li::before { content: ""; display: block; position: absolute; left: 0; top: 0.7em; width: 10px; height: 1px; background-color: #ccc; } .tree a { color: #0366d6; text-decoration: none; } .tree a:hover { text-decoration: underline; }</style>' >> index.html
+              
+              # 返回上一级目录
+              cd - > /dev/null
+          done
+          EOF
+          
+          # 执行脚本生成所有目录树
+          chmod +x generate_trees.sh
+          ./generate_trees.sh
+          # 删除脚本文件
+          rm generate_trees.sh
+
+      - name: Commit and push
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          
+          # 检查是否有文件变更
+          if [[ -n $(git status --porcelain) ]]; then
+            git add -A
+            git commit -m "Update directory trees"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+    
