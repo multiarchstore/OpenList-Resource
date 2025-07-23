@@ -5,6 +5,8 @@ on:
     branches:
       - main  # 主分支
 
+permissions:
+  contents: write
 jobs:
   generate-tree:
     runs-on: ubuntu-latest
