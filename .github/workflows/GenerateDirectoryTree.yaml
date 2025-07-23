@@ -38,9 +38,10 @@ jobs:
               
               # 生成目录树并保存到index.html，排除已有的index.html和隐藏目录
               tree -H . -L 2 -o index.html --charset=UTF-8 --ignore-case -I "index.html|.git|.github|.vscode|generate_trees.sh" .
-              
+              # 将 `<a href="./">.</a>` 替换为 `<a href="../">👆 回到上一级目录</a>`
+              sed -i 's|<a href="./">.</a>|<a href="../">👆 回到上一级目录</a>|g' index.html
               # 添加自定义样式
-              echo '<style>body { font-family: Arial, sans-serif; } .tree { margin: 20px; } .tree ul { list-style-type: none; margin-left: 20px; padding-left: 1em; position: relative; } .tree ul ul::before { content: ""; display: block; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background-color: #ccc; } .tree li { margin: 5px 0; padding-left: 1.5em; position: relative; } .tree li::before { content: ""; display: block; position: absolute; left: 0; top: 0.7em; width: 10px; height: 1px; background-color: #ccc; } .tree a { color: #0366d6; text-decoration: none; } .tree a:hover { text-decoration: underline; }</style>' >> index.html
+              echo '<style>body { font-family: Arial, sans-serif; } .tree { margin: 20px; } .tree ul { list-style-type: none; margin-left: 20px; padding-left: 1em; position: relative; } .tree ul ul::before { content: ""; display: block; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background-color: #ccc; } .tree li { margin: 5px 0; padding-left: 1.5em; position: relative; } .tree li::before { content: ""; display: block; position: absolute; left: 0; top: 0.7em; width: 10px; height: 1px; background-color: #ccc; } .tree a { color: #0366d6; text-decoration: none; } .tree a:hover { text-decoration: underline; } .back-link { font-weight: bold; color: #0366d6; }</style>' >> index.html
               
               # 返回上一级目录
               cd - > /dev/null
@@ -50,6 +51,8 @@ jobs:
           # 执行脚本生成所有目录树
           chmod +x generate_trees.sh
           ./generate_trees.sh
+          # 将生成的index.html `<a href="../">👆 回到上一级目录</a>` 替换为 `<a href="./">.</a>`
+          sed -i 's|<a href="../">👆 回到上一级目录</a>|<a href="./">.</a>|g' index.html
           # 删除脚本文件
           rm generate_trees.sh
 
@@ -57,13 +60,14 @@ jobs:
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
-          
+          # 拉取远程最新代码并rebase，确保本地与远程同步
           # 检查是否有文件变更
           if [[ -n $(git status --porcelain) ]]; then
             git add -A
             git commit -m "Update directory trees"
-            git push
+            git pull --rebase origin main
+            # 推送时若有冲突，自动尝试rebase解决（需确保无手动冲突）
+            git push --force-with-lease origin main
           else
             echo "No changes to commit"
           fi
-    
