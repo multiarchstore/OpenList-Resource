@@ -38,6 +38,7 @@ declare -A ARCH_MAP=(
     ["aarch64"]="arm64"
     ["loongarch64"]="loong64"
     ["loongson3"]="mips64le"
+    ["s390x"]="s390x"
 )
 
 # 检查系统是否为Linux
@@ -1179,8 +1180,8 @@ SHOW_ABOUT() {
     echo -e "${GREEN_COLOR}├────────────────────────────────────────────────────┤${RES}"
     echo -e "${GREEN_COLOR}│                                                    │${RES}"
     echo -e "${GREEN_COLOR}│  ${CYAN_COLOR}版本信息：${RES}                                       │"
-    echo -e "${GREEN_COLOR}│    脚本版本: 1.3.1                                 │${RES}"
-    echo -e "${GREEN_COLOR}│    更新日期: 2025-07-04                            │${RES}"
+    echo -e "${GREEN_COLOR}│    脚本版本: 1.3.2                                 │${RES}"
+    echo -e "${GREEN_COLOR}│    更新日期: 2025-07-25                            │${RES}"
     echo -e "${GREEN_COLOR}│                                                    │${RES}"
     echo -e "${GREEN_COLOR}│                                                    │${RES}"
     echo -e "${GREEN_COLOR}│  ${CYAN_COLOR}OpenList：${RES}                                      │"
@@ -1194,7 +1195,7 @@ SHOW_ABOUT() {
     echo -e "${GREEN_COLOR}│    许可证: MIT License                             │${RES}"
     echo -e "${GREEN_COLOR}│                                                    │${RES}"
     echo -e "${GREEN_COLOR}│  ${CYAN_COLOR}支持平台：${RES}                                      │"
-    echo -e "${GREEN_COLOR}│    架构: x86_64, arm64                             │${RES}"
+    echo -e "${GREEN_COLOR}│    架构: 详见下载页面                              │${RES}"
     echo -e "${GREEN_COLOR}│    系统: Linux with systemd                        │${RES}"
     echo -e "${GREEN_COLOR}│                                                    │${RES}"
     echo -e "${GREEN_COLOR}│                                                    │${RES}"
