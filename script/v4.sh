@@ -4,7 +4,7 @@
 # OpenList Manage Script
 #
 # Version: 1.3.1
-# Last Updated: 2025-07-04
+# Last Updated: 2025-07-25
 #
 # Description:
 #   A management script for OpenList (https://github.com/OpenListTeam/OpenList)
@@ -15,7 +15,7 @@
 #   - Linux with systemd
 #   - Root privileges for installation
 #   - curl, tar
-#   - x86_64 or arm64 architecture
+#   - All supported architectures, refer to release page for details
 #
 # Author: ILoveScratch and OpenList Dev Team
 #
@@ -31,6 +31,21 @@ BLUE_COLOR='\e[1;34m'
 CYAN_COLOR='\e[1;36m'
 PURPLE_COLOR='\e[1;35m'
 RES='\e[0m'
+
+# CPU架构定义
+declare -A ARCH_MAP=(
+    ["x86_64"]="amd64"
+    ["aarch64"]="arm64"
+    ["loongarch64"]="loong64"
+    ["loongson3"]="mips64le"
+)
+
+# 检查系统是否为Linux
+CURRENT_OS=$(uname -s)
+if [ "$CURRENT_OS" != "Linux" ]; then
+    echo -e "${RED_COLOR}错误：此脚本仅支持 Linux 系统"
+    exit 1
+fi
 
 # 使用 sudo -v 确保当前script使用root执行
 if [ "$(id -u)" != "0" ]; then
@@ -171,18 +186,18 @@ fi
 
 ARCH="UNKNOWN"
 
-if [ "$platform" = "x86_64" ]; then
-  ARCH=amd64
-elif [ "$platform" = "aarch64" ]; then
-  ARCH=arm64
+if [ -z "${ARCH_MAP["$platform"]}" ]; then 
+  ARCH="UNKNOWN"
+else
+  ARCH=${ARCH_MAP["$platform"]}
 fi
 
 # 环境检查
 if [ "$ARCH" == "UNKNOWN" ]; then
-  echo -e "\r\n${RED_COLOR}出错了${RES}，一键安装目前仅支持 x86_64 和 arm64 平台。\r\n"
+  echo -e "\r\n${RED_COLOR}出错了${RES}，一键安装目前暂不支持 $platform 平台。\r\n"
   exit 1
 elif ! command -v systemctl >/dev/null 2>&1; then
-  echo -e "\r\n${RED_COLOR}出错了${RES}，无法确定你当前的 Linux 发行版。\r\n建议手动安装。\r\n"
+  echo -e "\r\n${RED_COLOR}出错了${RES}，你当前的 Linux 发行版不支持 systemd。\r\n建议手动安装。\r\n"
   exit 1
 fi
 
