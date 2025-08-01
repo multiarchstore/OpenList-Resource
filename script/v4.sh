@@ -262,7 +262,6 @@ backup_config() {
         return 1
     fi
 
-    read -p "按Enter键继续..."
     return 0
 }
 
@@ -274,8 +273,7 @@ restore_config() {
     local backup_base_dir="/opt/openlist_backups"
     if [ ! -d "$backup_base_dir" ]; then
         echo -e "${RED_COLOR}错误：未找到备份目录 $backup_base_dir${RES}"
-        read -p "按Enter键继续..."
-        return 1
+            return 1
     fi
 
     # 列出可用的备份
@@ -308,14 +306,12 @@ restore_config() {
         backup_path="${backup_list[$((choice-1))]}"
     else
         echo -e "${RED_COLOR}无效的选择${RES}"
-        read -p "按Enter键继续..."
-        return 1
+            return 1
     fi
 
     if [ ! -d "$backup_path/data" ]; then
         echo -e "${RED_COLOR}错误：备份目录不存在或无效${RES}"
-        read -p "按Enter键继续..."
-        return 1
+            return 1
     fi
 
     echo -e "${YELLOW_COLOR}警告：此操作将覆盖当前配置${RES}"
