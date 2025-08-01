@@ -1165,7 +1165,6 @@ RESET_PASSWORD() {
             return 1
             ;;
     esac
-    read -s -n1 -p "按任意键继续 ... "
 }
 
 # 在文件开头添加管理脚本路径配置
@@ -1486,11 +1485,7 @@ if [ $# -eq 0 ]; then
   while true; do
     SHOW_MENU
     echo
-    if [ $? -eq 0 ]; then
-      sleep 1  # 成功
-    else
-      sleep 2  # FAIL
-    fi
+    read -s -n1 -p "按任意键继续 ... "
     clear
   done
 elif [ "$1" = "install" ]; then
