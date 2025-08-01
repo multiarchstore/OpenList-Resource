@@ -272,7 +272,7 @@ restore_config() {
     local backup_base_dir="/opt/openlist_backups"
     if [ ! -d "$backup_base_dir" ]; then
         echo -e "${RED_COLOR}错误：未找到备份目录 $backup_base_dir${RES}"
-            return 1
+        return 1
     fi
 
     # 列出可用的备份
