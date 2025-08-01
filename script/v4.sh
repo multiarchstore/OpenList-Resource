@@ -243,7 +243,6 @@ backup_config() {
 
     if [ ! -d "$INSTALL_PATH/data" ]; then
         echo -e "${RED_COLOR}错误：未找到配置目录${RES}"
-        read -p "按 Enter 继续..."
         return 1
     fi
 
@@ -291,7 +290,6 @@ restore_config() {
 
     if [ $backup_count -eq 0 ]; then
         echo -e "${RED_COLOR}未找到任何备份${RES}"
-        read -p "按Enter继续..."
         return 1
     fi
 
@@ -336,8 +334,6 @@ restore_config() {
             echo -e "${YELLOW_COLOR}已取消恢复${RES}"
             ;;
     esac
-
-    read -p "按 Enter 键继续..."
 }
 
 
@@ -629,8 +625,6 @@ check_system_status() {
     fi
 
     echo
-    read -p "按下 Enter 返回主菜单..." -n 1
-    echo
 }
 
 # Download
@@ -916,8 +910,6 @@ UPDATE() {
     echo -e "${GREEN_COLOR}当前版本：${RES}$version_info"
     echo -e "${GREEN_COLOR}更新时间：${RES}$(date '+%Y-%m-%d %H:%M:%S')"
     echo
-    read -p "按下 Enter 返回主菜单..." -n 1
-    echo
 }
 
 UNINSTALL() {
@@ -1199,8 +1191,6 @@ SHOW_ABOUT() {
     echo -e "${GREEN_COLOR}└────────────────────────────────────────────────────┘${RES}"
     echo
     echo -e "${YELLOW_COLOR}感谢使用 OpenList 管理脚本！${RES}"
-    echo
-    read -p "按下 Enter 返回主菜单..." -n 1
     echo
 }
 
