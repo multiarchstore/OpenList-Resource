@@ -1165,6 +1165,7 @@ RESET_PASSWORD() {
             return 1
             ;;
     esac
+    read -s -n1 -p "按任意键继续 ... "
 }
 
 # 在文件开头添加管理脚本路径配置
