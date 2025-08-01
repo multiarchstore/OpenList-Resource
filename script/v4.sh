@@ -304,12 +304,12 @@ restore_config() {
         backup_path="${backup_list[$((choice-1))]}"
     else
         echo -e "${RED_COLOR}无效的选择${RES}"
-            return 1
+        return 1
     fi
 
     if [ ! -d "$backup_path/data" ]; then
         echo -e "${RED_COLOR}错误：备份目录不存在或无效${RES}"
-            return 1
+        return 1
     fi
 
     echo -e "${YELLOW_COLOR}警告：此操作将覆盖当前配置${RES}"
